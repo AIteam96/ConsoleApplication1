@@ -45,16 +45,19 @@ state successor(state s, short int level)
 	for (int i = 0; i < s.size; i++)
 	{
 		node current = s.matrix[i][level];
-		if (array[current.value - 1] != -1)
+		if (current.condition == 'W')
 		{
-			int x = array[current.value - 1];
-			s.matrix[x][level].condition = 'K';
-			s.matrix[i][level].condition = 'K';
+			if (array[current.value - 1] != -1)
+			{
+				int x = array[current.value - 1];
+				s.matrix[x][level].condition = 'K';
+				s.matrix[i][level].condition = 'K';
 
-		}
-		else
-		{
-			array[current.value - 1] = i;
+			}
+			else
+			{
+				array[current.value - 1] = i;
+			}
 		}
 	}
 	int array[8] = { -1, -1, -1, -1, -1, -1, -1, -1 };
@@ -62,25 +65,105 @@ state successor(state s, short int level)
 	for (int i = 0; i < s.size; i++)
 	{
 		node current = s.matrix[level][i];
-		if (array[current.value - 1] != -1)
+		if (current.condition == 'W')
 		{
-			int y = array[current.value - 1];
-			s.matrix[level][y].condition = 'K';
-			s.matrix[level][i].condition = 'K';
+			if (array[current.value - 1] != -1)
+			{
+				int y = array[current.value - 1];
+				s.matrix[level][y].condition = 'K';
+				s.matrix[level][i].condition = 'K';
 
-		}
-		else
-		{
-			array[current.value - 1] = i;
-			
+			}
+			else
+			{
+				array[current.value - 1] = i;
+
+			}
 		}
 	}
 	return s;
 }
-bool rules(state s, )
-
+bool rules(state s, int x, int y)
 {
+	//Rule #2: black nodes do not touch each other vertically or horizontally
+	bool result=true;
+	if (x > 0)
+	{
+		if (s.matrix[x - 1][y].condition == 'B')
+		{
+			result = false;
+			return result;
+		}
+	}
+	if (x < s.size -1)
+	{
+		if (s.matrix[x - 1][y].condition == 'B')
+		{
+			result = false;
+			return result;
+		}
+	}
+	if (y > 0)
+	{
+		if (s.matrix[x][y - 1].condition == 'B')
+		{
+			result = false;
+			return result;
+		}
+	}
+	if (y < s.size - 1)
+	{
+		if (s.matrix[x][y + 1].condition == 'B')
+		{
+			result = false;
+			return result;
+		}
+	}
+	//Rule #3:all un-shaded (white) squares create a single continuous area T_T
+	if (x > 0)
+	{
 
+	}
+}
+bool check_rule_one(state s, int level)
+{
+	int array[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	for (int i = 0; i < s.size; i++)
+	{
+		node current = s.matrix[i][level];
+		if (current.condition == 'W')
+		{
+			if (array[current.value - 1] != 0)
+			{
+				return false;
+
+			}
+			else
+			{
+				array[current.value - 1] ++;
+			}
+		}
+	}
+	int array[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+	for (int i = 0; i < s.size; i++)
+	{
+		node current = s.matrix[level][i];
+		if (current.condition == 'W')
+		{
+			if (array[current.value - 1] != 0)
+			{
+				return false;
+
+			}
+			else
+			{
+				array[current.value - 1] ++;
+
+			}
+		}
+	}
+	return true;
 }
 
 state hill_climbing(state)
