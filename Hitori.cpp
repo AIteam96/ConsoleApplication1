@@ -159,11 +159,58 @@ bool check_rule_one(state s, int level)
 			else
 			{
 				array[current.value - 1] ++;
-
 			}
 		}
 	}
 	return true;
+}
+vector<pair<int,int>> repeated(state s)
+{
+	vector<pair<int, int>> result;
+	int check[8][3] =
+	{
+		{ -1, -1, -1 },
+		{ -1, -1, -1 },
+		{ -1, -1, -1 },
+		{ -1, -1, -1 },
+		{ -1, -1, -1 },
+		{ -1, -1, -1 },
+		{ -1, -1, -1 },
+		{ -1, -1, -1 },
+	};
+	for (int i = 0; i < s.size; i++)
+	{
+		for (int j = 0; j < s.size; j++)
+		{
+			node current = s.matrix[i][j];
+			if (check[current.value][0] == -1)
+			{
+				check[current.value][0] ++;
+				check[current.value][1] = i;
+				check[current.value][2] = j;
+				
+			}
+			else
+			{
+				check[current.value][0] ++;
+				pair<int, int> temp;
+				temp.first = i;
+				temp.second = j;
+				result.push_back(temp);
+			}
+		}
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		if (check[i][0] > 0)
+		{
+			pair<int, int> temp;
+			temp.first = check[i][1];
+			temp.second = check[i][2];
+			result.push_back(temp);
+		}
+	}
+	return result;
 }
 
 state hill_climbing(state)
