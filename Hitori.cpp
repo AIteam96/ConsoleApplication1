@@ -3,6 +3,8 @@
 #include <utility>
 #include <fstream>
 #include <cstdint>
+#include <algorithm>
+
 using namespace std;
 
 /***************************************************HITORI SOlVER**************************************************/
@@ -295,7 +297,10 @@ void AC3(state &s, vector<csp_struct> &csp_)
 {
 	for (int i = 0; i < csp_.size(); i++)
 	{
-		if (check_rule_one(s,csp_[i].x)==false)
-			csp_[i]
+		if (check_rule_one(s, csp_[i].x) == false || check_rule_one(s, csp_[i].y) == false)
+			csp_[i].domine.erase(std::remove(csp_[i].domine.begin(), csp_[i].domine.end(), 'W'), csp_[i].domine.end());
+		if (check_rule_two(s, csp_[i].x, csp_[i].y) == false || repeated(s, csp_[i].x, csp_[i].y) == false || check_rule_three(s, csp_[i].x, csp_[i].y) == false)
+			csp_[i].domine.erase(std::remove(csp_[i].domine.begin(), csp_[i].domine.end(), 'B'), csp_[i].domine.end());
+
 	}
 }
