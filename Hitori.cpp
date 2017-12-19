@@ -10,7 +10,7 @@ using namespace std;
 struct node
 {
 	short int value;//between 1 to 9
-	char condition;//W for white & B for black & K for kandidate
+	char condition;//W for white & B for black 
 };
 //matrix initialed to be solved -> hitori main table
 struct state
@@ -39,22 +39,35 @@ int heuristic(state s)
 	return result;
 }
 //knadidates all the possible nodes that can become black in next moves 
-state successor(state s, short int level)
+vector<state> successor(state s, short int level)
 {
+	vector<state> vec;
 	int array[8] = { -1, -1, -1, -1, -1, -1, -1, -1 };
 	for (int i = 0; i < s.size; i++)
 	{
-		node current = s.matrix[i][level];
+		state temp = s;
+		
+		node current = temp.matrix[i][level];
 		if (current.condition == 'W')
 		{
-			if (array[current.value - 1] != -1)
+			if (array[current.value - 1] >=0)
 			{
 				int x = array[current.value - 1];
-				s.matrix[x][level].condition = 'K';
-				s.matrix[i][level].condition = 'K';
-
+				temp.matrix[x][level].condition = 'B';
+				vec.push_back(temp);
+				temp.matrix[x][level].condition = 'W';
+				temp.matrix[i][level].condition = 'B';
+				vec.push_back(temp);
+				temp.matrix[i][level].condition = 'W';
+				array[current.value - 1] = -2;
 			}
-			else
+			else if (array[current.value - 1] == -2)
+			{
+				temp.matrix[i][level].condition = 'B';
+				vec.push_back(temp);
+				temp.matrix[i][level].condition = 'W';
+			}
+			else if (array[current.value - 1] == -2)
 			{
 				array[current.value - 1] = i;
 			}
@@ -64,26 +77,33 @@ state successor(state s, short int level)
 
 	for (int i = 0; i < s.size; i++)
 	{
-		node current = s.matrix[level][i];
-		if (current.condition == 'W')
+		state temp = s;
+		node current = temp.matrix[level][i];
+		if (array[current.value - 1] >= 0)
 		{
-			if (array[current.value - 1] != -1)
-			{
-				int y = array[current.value - 1];
-				s.matrix[level][y].condition = 'K';
-				s.matrix[level][i].condition = 'K';
-
-			}
-			else
-			{
-				array[current.value - 1] = i;
-
-			}
+			int x = array[current.value - 1];
+			temp.matrix[level][x].condition = 'B';
+			vec.push_back(temp);
+			temp.matrix[level][x].condition = 'W';
+			temp.matrix[level][i].condition = 'B';
+			vec.push_back(temp);
+			temp.matrix[level][i].condition = 'W';
+			array[current.value - 1] = -2;
+		}
+		else if (array[current.value - 1] == -2)
+		{
+			temp.matrix[level][i].condition = 'B';
+			vec.push_back(temp);
+			temp.matrix[level][i].condition = 'W';
+		}
+		else if (array[current.value - 1] == -2)
+		{
+			array[current.value - 1] = i;
 		}
 	}
-	return s;
+	return vec;
 }
-bool rules(state s, int x, int y)
+bool check_rule_two(state s, int x, int y)
 {
 	//Rule #2: black nodes do not touch each other vertically or horizontally
 	bool result=true;
@@ -119,12 +139,16 @@ bool rules(state s, int x, int y)
 			return result;
 		}
 	}
-	//Rule #3:all un-shaded (white) squares create a single continuous area T_T
-	if (x > 0)
-	{
+	
 
-	}
 }
+
+//Rule #3:all un-shaded (white) squares create a single continuous area T_T
+bool check_rule_three(state s, int x, int y)
+{
+
+}
+//Rule #1(is goal in level): No number appears in a row or column more than once
 bool check_rule_one(state s, int level)
 {
 	int array[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -214,6 +238,10 @@ vector<pair<int,int>> repeated(state s)
 }
 
 state hill_climbing(state)
+{
+
+}
+state simulated_annaling(state)
 {
 
 }
