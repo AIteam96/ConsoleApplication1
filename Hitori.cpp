@@ -129,7 +129,56 @@ bool check_rule_two(state s, int x, int y)
 //Rule #3:all un-shaded (white) squares create a single continuous area T_T
 bool check_rule_three(state s, int x, int y)
 {
-
+	int counter1 = 0;
+	int counter2 = 0;
+	int counter3 = 0;
+	int counter4 = 0;
+	if (x > 0) {
+		if (x + 2 < s.size)
+			if (s.matrix[x + 2][y].condition == 'B')
+				counter1++;
+		if (y + 1 < s.size && x + 1 < s.size)
+			if (s.matrix[x + 1][y + 1].condition == 'B')
+				counter1++;
+		if (y - 1 > 0 && x + 1 < s.size)
+			if (s.matrix[x + 1][y - 1].condition == 'B')
+				counter1++;
+		//////////////////////////////////////////////
+		if (x - 2 > 0)
+			if (s.matrix[x - 2][y].condition == 'B')
+				counter3++;
+		if (y + 1 < s.size && x - 1 > 0)
+			if (s.matrix[x - 1][y + 1].condition == 'B')
+				counter3++;
+		if (y - 1 > 0 && x - 1 > 0)
+			if (s.matrix[x - 1][y - 1].condition == 'B')
+				counter3++;
+		//////////////////////////////////////////////
+		if (y - 2 > 0)
+			if (s.matrix[x][y - 2].condition == 'B')
+				counter4++;
+		if (x + 1 < s.size && y - 1 > 0)
+			if (s.matrix[x + 1][y - 1].condition == 'B')
+				counter4++;
+		if (x - 1 > 0 && y - 1 > 0)
+			if (s.matrix[x - 1][y - 1].condition == 'B')
+				counter4++;
+		///////////////////////////////////////////////
+		if (y = 2 < s.size)
+			if (s.matrix[x][y + 2].condition == 'B')
+				counter2++;
+		if (x + 1 < s.size && y + 1 < s.size)
+			if (s.matrix[x + 1][y + 1].condition == 'B')
+				counter2++;
+		if (x - 1 > 0 && y + 1 < s.size)
+			if (s.matrix[x - 1][y + 1].condition == 'B')
+				counter2++;
+		/////////////////////////////////////////////
+		if (counter1 != 3 || counter2 != 3 || counter3 != 3 || counter4 != 3)
+			return true;// condition convert to black
+		return false;
+	}
+	return false;
 }
 //checks if the chosen node's value is repeated
 bool repeated(state s,int x,int y)
@@ -247,6 +296,6 @@ void AC3(state &s, vector<csp_struct> &csp_)
 	for (int i = 0; i < csp_.size(); i++)
 	{
 		if (check_rule_one(s,csp_[i].x)==false)
-			csp_[i].
+			csp_[i]
 	}
 }
