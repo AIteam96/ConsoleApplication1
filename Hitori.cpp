@@ -210,65 +210,7 @@ bool repeated(state s,int x,int y)
 vector<state> successor(state s, int x,int y)
 {
 	vector<state> vec;
-	/*int array[8] = { -1, -1, -1, -1, -1, -1, -1, -1 };
-	for (int i = 0; i < s.size; i++)
-	{
-		state temp = s;
-		
-		node current = temp.matrix[i][level];
-		if (current.condition == 'N')
-		{
-			if (array[current.value - 1] >=0)
-			{
-				int x = array[current.value - 1];
-				temp.matrix[x][level].condition = 'B';
-				vec.push_back(temp);
-				temp.matrix[x][level].condition = 'W';
-				temp.matrix[i][level].condition = 'B';
-				vec.push_back(temp);
-				temp.matrix[i][level].condition = 'W';
-				array[current.value - 1] = -2;
-			}
-			else if (array[current.value - 1] == -2)
-			{
-				temp.matrix[i][level].condition = 'B';
-				vec.push_back(temp);
-				temp.matrix[i][level].condition = 'W';
-			}
-			else if (array[current.value - 1] == -2)
-			{
-				array[current.value - 1] = i;
-			}
-		}
-	}
-	int array[8] = { -1, -1, -1, -1, -1, -1, -1, -1 };
 
-	for (int i = 0; i < s.size; i++)
-	{
-		state temp = s;
-		node current = temp.matrix[level][i];
-		if (array[current.value - 1] >= 0)
-		{
-			int x = array[current.value - 1];
-			temp.matrix[level][x].condition = 'B';
-			vec.push_back(temp);
-			temp.matrix[level][x].condition = 'W';
-			temp.matrix[level][i].condition = 'B';
-			vec.push_back(temp);
-			temp.matrix[level][i].condition = 'W';
-			array[current.value - 1] = -2;
-		}
-		else if (array[current.value - 1] == -2)
-		{
-			temp.matrix[level][i].condition = 'B';
-			vec.push_back(temp);
-			temp.matrix[level][i].condition = 'W';
-		}
-		else if (array[current.value - 1] == -2)
-		{
-			array[current.value - 1] = i;
-		}
-	}*/
 	state temp = s;
 	if (check_rule_one(s, x) == true && check_rule_one(s, y) == true)
 	{
@@ -302,5 +244,51 @@ void AC3(state &s, vector<csp_struct> &csp_)
 		if (check_rule_two(s, csp_[i].x, csp_[i].y) == false || repeated(s, csp_[i].x, csp_[i].y) == false || check_rule_three(s, csp_[i].x, csp_[i].y) == false)
 			csp_[i].domine.erase(std::remove(csp_[i].domine.begin(), csp_[i].domine.end(), 'B'), csp_[i].domine.end());
 
+	}
+}
+state CSP(state s)
+{
+	vector<csp_struct> csp_;
+	for (int i = 0; i < s.size; i++)
+	{
+		for (int j = 0; j < s.size; j++)
+		{
+			csp_[i + j].x = i;
+			csp_[i + j].y = j;
+		}
+	}
+	int i=0, j=0;
+	while (!csp_.empty())
+	{
+		csp_.po;
+		AC3(s,csp_)
+	}
+
+}
+state read()
+{
+	vector<vector<node> > vec(MAX, vector<node>(MAX));
+	//initiate all condition to NONE
+	for (int i = 0; i < MAX; i++) {
+		for (int j = 0; j < MAX; j++) {
+			vec[i][j].condition == 'N';
+		}
+	}
+	fstream inputfile("sample1.txt");
+	if (inputfile.is_open()) {
+		for (int i = 0; i < MAX; i++) {
+			for (int j = 0; j < MAX; j++) {
+				inputfile >> vec[i][j].value;
+			}
+		}
+		inputfile.close();
+		state s;
+		s.matrix = vec;
+		return s;
+	}
+	else
+	{
+		cout << "Couldn't read file!\n";
+		exit(0);
 	}
 }
